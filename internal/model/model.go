@@ -116,7 +116,7 @@ type Server struct {
 	Description   string         `json:"description" bson:"description"`
 	Repository    Repository     `json:"repository" bson:"repository"`
 	VersionDetail VersionDetail  `json:"version_detail" bson:"version_detail"`
-	Skills        []string       `json:"skills,omitempty" bson:"skills,omitempty"`
+	Skills        []string       `json:"skills" bson:"skills,omitempty"`
 	Metadata      map[string]any `json:"metadata,omitempty" bson:"metadata,omitempty"`
 }
 
@@ -125,6 +125,6 @@ type ServerDetail struct {
 	Server   `json:",inline" bson:",inline"`
 	Packages []Package      `json:"packages,omitempty" bson:"packages,omitempty"`
 	Remotes  []Remote       `json:"remotes,omitempty" bson:"remotes,omitempty"`
-	Skills   []string       `json:"skills,omitempty" bson:"skills,omitempty"`
+	Skills   []string       `json:"skills" bson:"skills,omitempty"`
 	Metadata map[string]any `json:"metadata,omitempty" bson:"metadata,omitempty"`
 }

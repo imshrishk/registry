@@ -577,8 +577,8 @@ func TestPublishIntegration(t *testing.T) {
 					VersionDetail: model.VersionDetail{
 						Version: "1.0.0",
 					},
-					Skills: []string{},
 				},
+				Skills: []string{},
 			},
 		}
 
@@ -591,7 +591,7 @@ func TestPublishIntegration(t *testing.T) {
 
 		recorder := httptest.NewRecorder()
 		handler := v0.PublishHandler(registryService, authService)
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 		assert.Contains(t, recorder.Body.String(), "invalid input")
@@ -611,8 +611,8 @@ func TestPublishIntegration(t *testing.T) {
 					VersionDetail: model.VersionDetail{
 						Version: "1.0.0",
 					},
-					Skills: []string{"search", ""},
 				},
+				Skills: []string{"search", ""},
 			},
 		}
 
@@ -625,7 +625,7 @@ func TestPublishIntegration(t *testing.T) {
 
 		recorder := httptest.NewRecorder()
 		handler := v0.PublishHandler(registryService, authService)
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 		assert.Contains(t, recorder.Body.String(), "invalid input")
@@ -663,7 +663,7 @@ func TestPublishIntegration(t *testing.T) {
 
 		recorder := httptest.NewRecorder()
 		handler := v0.PublishHandler(registryService, authService)
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusCreated, recorder.Code)
 		var response map[string]string
@@ -734,7 +734,7 @@ func TestPublishIntegration(t *testing.T) {
 		recorder := httptest.NewRecorder()
 
 		// Call the handler
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		// Check the response
 		assert.Equal(t, http.StatusCreated, recorder.Code)
@@ -782,7 +782,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "dummy_token")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusCreated, recorder.Code)
 
@@ -815,7 +815,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer token")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 		assert.Contains(t, recorder.Body.String(), "Name is required")
@@ -840,7 +840,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer token")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 		assert.Contains(t, recorder.Body.String(), "Version is required")
@@ -865,7 +865,7 @@ func TestPublishIntegration(t *testing.T) {
 		// No Authorization header
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusUnauthorized, recorder.Code)
 		assert.Contains(t, recorder.Body.String(), "Authorization header is required")
@@ -879,7 +879,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer token")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 		assert.Contains(t, recorder.Body.String(), "Invalid")
@@ -890,7 +890,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer token")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusMethodNotAllowed, recorder.Code)
 		assert.Contains(t, recorder.Body.String(), "Method not allowed")
@@ -921,7 +921,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer github_token_first")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		var response map[string]string
 		err = json.Unmarshal(recorder.Body.Bytes(), &response)
@@ -955,7 +955,7 @@ func TestPublishIntegration(t *testing.T) {
 		duplicateReq.Header.Set("Authorization", "Bearer github_token_duplicate")
 
 		duplicateRecorder := httptest.NewRecorder()
-		handler(duplicateRecorder, duplicateReq)
+		handler.ServeHTTP(duplicateRecorder, duplicateReq)
 
 		// The duplicate should fail
 		assert.Equal(t, http.StatusBadRequest, duplicateRecorder.Code)
@@ -993,7 +993,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer github_token_v1")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		var response map[string]string
 		err = json.Unmarshal(recorder.Body.Bytes(), &response)
@@ -1027,7 +1027,7 @@ func TestPublishIntegration(t *testing.T) {
 		secondReq.Header.Set("Authorization", "Bearer github_token_v2")
 
 		secondRecorder := httptest.NewRecorder()
-		handler(secondRecorder, secondReq)
+		handler.ServeHTTP(secondRecorder, secondReq)
 
 		var secondResponse map[string]string
 		err = json.Unmarshal(secondRecorder.Body.Bytes(), &secondResponse)
@@ -1073,7 +1073,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer github_token_newer")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		var response map[string]string
 		err = json.Unmarshal(recorder.Body.Bytes(), &response)
@@ -1107,7 +1107,7 @@ func TestPublishIntegration(t *testing.T) {
 		olderReq.Header.Set("Authorization", "Bearer github_token_older")
 
 		olderRecorder := httptest.NewRecorder()
-		handler(olderRecorder, olderReq)
+		handler.ServeHTTP(olderRecorder, olderReq)
 
 		// This should fail - we shouldn't allow publishing older versions after newer ones
 		assert.Equal(t, http.StatusBadRequest, olderRecorder.Code, "Publishing older version should fail")
@@ -1160,7 +1160,7 @@ func TestPublishIntegrationEndToEnd(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer github_e2e_token")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		var response map[string]string
 		err = json.Unmarshal(recorder.Body.Bytes(), &response)
@@ -1312,7 +1312,7 @@ func TestPublishIntegrationWithComplexPackages(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer github_complex_token")
 
 		recorder := httptest.NewRecorder()
-		handler(recorder, req)
+		handler.ServeHTTP(recorder, req)
 
 		assert.Equal(t, http.StatusCreated, recorder.Code)
 

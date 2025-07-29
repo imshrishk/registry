@@ -119,6 +119,26 @@ func (s *fakeRegistryService) Publish(serverDetail *model.ServerDetail) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	if serverDetail == nil {
+		return database.ErrInvalidInput
+	}
+
+	// Validate skills: if provided, must not be empty and must not contain empty strings
+	skills := serverDetail.Skills
+	if skills == nil {
+		skills = serverDetail.Server.Skills
+	}
+	if skills != nil {
+		if len(skills) == 0 {
+			return database.ErrInvalidInput
+		}
+		for _, skill := range skills {
+			if skill == "" {
+				return database.ErrInvalidInput
+			}
+		}
+	}
+
 	// Use the database's Publish method to add the server detail
 	return s.db.Publish(ctx, serverDetail)
 }
