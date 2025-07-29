@@ -585,6 +585,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer token")
 
 		recorder := httptest.NewRecorder()
+		handler := v0.PublishHandler(registryService, authService)
 		handler(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
@@ -618,6 +619,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer token")
 
 		recorder := httptest.NewRecorder()
+		handler := v0.PublishHandler(registryService, authService)
 		handler(recorder, req)
 
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
@@ -655,6 +657,7 @@ func TestPublishIntegration(t *testing.T) {
 		req.Header.Set("Authorization", "Bearer token")
 
 		recorder := httptest.NewRecorder()
+		handler := v0.PublishHandler(registryService, authService)
 		handler(recorder, req)
 
 		assert.Equal(t, http.StatusCreated, recorder.Code)
@@ -664,7 +667,7 @@ func TestPublishIntegration(t *testing.T) {
 		assert.Equal(t, "Server publication successful", response["message"])
 		assert.NotEmpty(t, response["id"], "Server ID should be generated")
 	})
-	
+
 	// Setup fake service and auth service
 	registryService := service.NewFakeRegistryService()
 	authService := &MockAuthService{}

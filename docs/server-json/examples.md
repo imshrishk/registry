@@ -54,6 +54,7 @@ Suppose your MCP server application requires a `mcp start` CLI arguments to star
 {
   "name": "Knapcode.SampleMcpServer",
   "description": "Sample NuGet MCP server for a random number and random weather",
+  "skills": ["random-number", "weather"],
   "version_detail": {
     "version": "0.4.0-beta"
   },
