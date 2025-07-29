@@ -14,6 +14,20 @@
   "version_detail": {
     "version": "1.0.2"
   },
+  "skills": [
+    "search",
+    "web-integration"
+  ],
+  "metadata": {
+    "region": "us-east-1",
+    "security": {
+      "oauth": true,
+      "api_key_required": true
+    },
+    "performance": {
+      "latency_ms": 120
+    }
+  },
   "packages": [
     {
       "registry_name": "npm",

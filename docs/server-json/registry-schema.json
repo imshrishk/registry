@@ -35,6 +35,18 @@
           }
         }
       }
+    },
+    "skills": {
+      "type": "array",
+      "description": "List of skills or capabilities provided by the server.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Arbitrary metadata for server selection and differentiation.",
+      "additionalProperties": true
     }
   }
 }
