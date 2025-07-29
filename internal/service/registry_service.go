@@ -94,6 +94,17 @@ func (s *registryServiceImpl) Publish(serverDetail *model.ServerDetail) error {
 		return database.ErrInvalidInput
 	}
 
+	// Validate skills: must not be empty, must not contain empty strings
+	skills := serverDetail.Skills
+	if len(skills) == 0 {
+		return database.ErrInvalidInput
+	}
+	for _, skill := range skills {
+		if skill == "" {
+			return database.ErrInvalidInput
+		}
+	}
+
 	err := s.db.Publish(ctx, serverDetail)
 	if err != nil {
 		return err

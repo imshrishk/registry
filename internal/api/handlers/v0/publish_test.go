@@ -558,6 +558,113 @@ func TestPublishHandlerAuthMethodSelection(t *testing.T) {
 }
 
 func TestPublishIntegration(t *testing.T) {
+	t.Run("publish fails with empty skills array", func(t *testing.T) {
+		publishReq := &model.PublishRequest{
+			ServerDetail: model.ServerDetail{
+				Server: model.Server{
+					Name:        "empty-skills-server",
+					Description: "Server with empty skills array",
+					Repository: model.Repository{
+						URL:    "https://example.com/empty-skills",
+						Source: "custom",
+						ID:     "custom/empty-skills",
+					},
+					VersionDetail: model.VersionDetail{
+						Version: "1.0.0",
+					},
+					Skills: []string{},
+				},
+			},
+		}
+
+		jsonData, err := json.Marshal(publishReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/v0/publish", bytes.NewBuffer(jsonData))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer token")
+
+		recorder := httptest.NewRecorder()
+		handler(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Contains(t, recorder.Body.String(), "invalid input")
+	})
+
+	t.Run("publish fails with skills containing empty string", func(t *testing.T) {
+		publishReq := &model.PublishRequest{
+			ServerDetail: model.ServerDetail{
+				Server: model.Server{
+					Name:        "empty-string-skill-server",
+					Description: "Server with skills containing empty string",
+					Repository: model.Repository{
+						URL:    "https://example.com/empty-string-skill",
+						Source: "custom",
+						ID:     "custom/empty-string-skill",
+					},
+					VersionDetail: model.VersionDetail{
+						Version: "1.0.0",
+					},
+					Skills: []string{"search", ""},
+				},
+			},
+		}
+
+		jsonData, err := json.Marshal(publishReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/v0/publish", bytes.NewBuffer(jsonData))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer token")
+
+		recorder := httptest.NewRecorder()
+		handler(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Contains(t, recorder.Body.String(), "invalid input")
+	})
+
+	t.Run("publish succeeds with valid skills and metadata", func(t *testing.T) {
+		publishReq := &model.PublishRequest{
+			ServerDetail: model.ServerDetail{
+				Server: model.Server{
+					Name:        "valid-skills-server",
+					Description: "Server with valid skills and metadata",
+					Repository: model.Repository{
+						URL:    "https://example.com/valid-skills",
+						Source: "custom",
+						ID:     "custom/valid-skills",
+					},
+					VersionDetail: model.VersionDetail{
+						Version: "1.0.0",
+					},
+					Skills: []string{"search", "web-integration"},
+					Metadata: map[string]interface{}{
+						"region": "us-east-1",
+						"performance": map[string]interface{}{"latency_ms": 100},
+					},
+				},
+			},
+		}
+
+		jsonData, err := json.Marshal(publishReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/v0/publish", bytes.NewBuffer(jsonData))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer token")
+
+		recorder := httptest.NewRecorder()
+		handler(recorder, req)
+
+		assert.Equal(t, http.StatusCreated, recorder.Code)
+		var response map[string]string
+		err = json.Unmarshal(recorder.Body.Bytes(), &response)
+		require.NoError(t, err)
+		assert.Equal(t, "Server publication successful", response["message"])
+		assert.NotEmpty(t, response["id"], "Server ID should be generated")
+	})
+	
 	// Setup fake service and auth service
 	registryService := service.NewFakeRegistryService()
 	authService := &MockAuthService{}
