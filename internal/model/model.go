@@ -111,20 +111,20 @@ type VersionDetail struct {
 
 // Server represents a basic server information as defined in the spec
 type Server struct {
-	ID            string        `json:"id" bson:"id"`
-	Name          string        `json:"name" bson:"name"`
-	Description   string        `json:"description" bson:"description"`
-	Repository    Repository    `json:"repository" bson:"repository"`
-	VersionDetail VersionDetail `json:"version_detail" bson:"version_detail"`
-	Skills        []string      `json:"skills,omitempty" bson:"skills,omitempty"`
-	Metadata      map[string]interface{} `json:"metadata,omitempty" bson:"metadata,omitempty"`
+	ID            string         `json:"id" bson:"id"`
+	Name          string         `json:"name" bson:"name"`
+	Description   string         `json:"description" bson:"description"`
+	Repository    Repository     `json:"repository" bson:"repository"`
+	VersionDetail VersionDetail  `json:"version_detail" bson:"version_detail"`
+	Skills        []string       `json:"skills,omitempty" bson:"skills,omitempty"`
+	Metadata      map[string]any `json:"metadata,omitempty" bson:"metadata,omitempty"`
 }
 
 // ServerDetail represents detailed server information as defined in the spec
 type ServerDetail struct {
 	Server   `json:",inline" bson:",inline"`
-	Packages []Package `json:"packages,omitempty" bson:"packages,omitempty"`
-	Remotes  []Remote  `json:"remotes,omitempty" bson:"remotes,omitempty"`
-	Skills   []string      `json:"skills,omitempty" bson:"skills,omitempty"`
-	Metadata map[string]interface{} `json:"metadata,omitempty" bson:"metadata,omitempty"`
+	Packages []Package      `json:"packages,omitempty" bson:"packages,omitempty"`
+	Remotes  []Remote       `json:"remotes,omitempty" bson:"remotes,omitempty"`
+	Skills   []string       `json:"skills,omitempty" bson:"skills,omitempty"`
+	Metadata map[string]any `json:"metadata,omitempty" bson:"metadata,omitempty"`
 }

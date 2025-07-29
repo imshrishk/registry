@@ -86,6 +86,7 @@ This will essentially instruct the MCP client to execute `dnx Knapcode.SampleMcp
 {
   "name": "io.modelcontextprotocol/filesystem",
   "description": "Node.js server implementing Model Context Protocol (MCP) for filesystem operations.",
+  "skills": ["filesystem", "file-access", "directory-listing"],
   "repository": {
     "url": "https://github.com/modelcontextprotocol/servers",
     "source": "github",

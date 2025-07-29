@@ -647,7 +647,7 @@ func TestPublishIntegration(t *testing.T) {
 					},
 					Skills: []string{"search", "web-integration"},
 					Metadata: map[string]interface{}{
-						"region": "us-east-1",
+						"region":      "us-east-1",
 						"performance": map[string]interface{}{"latency_ms": 100},
 					},
 				},
