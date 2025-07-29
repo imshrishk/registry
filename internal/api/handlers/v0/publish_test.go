@@ -558,6 +558,11 @@ func TestPublishHandlerAuthMethodSelection(t *testing.T) {
 }
 
 func TestPublishIntegration(t *testing.T) {
+	// Setup fake service and auth service
+	registryService := service.NewFakeRegistryService()
+	authService := &MockAuthService{}
+	authService.Mock.On("ValidateAuth", mock.Anything, mock.AnythingOfType("model.Authentication")).Return(true, nil)
+
 	t.Run("publish fails with empty skills array", func(t *testing.T) {
 		publishReq := &model.PublishRequest{
 			ServerDetail: model.ServerDetail{
@@ -667,11 +672,6 @@ func TestPublishIntegration(t *testing.T) {
 		assert.Equal(t, "Server publication successful", response["message"])
 		assert.NotEmpty(t, response["id"], "Server ID should be generated")
 	})
-
-	// Setup fake service and auth service
-	registryService := service.NewFakeRegistryService()
-	authService := &MockAuthService{}
-	authService.Mock.On("ValidateAuth", mock.Anything, mock.AnythingOfType("model.Authentication")).Return(true, nil)
 
 	// Create the publish handler
 	handler := v0.PublishHandler(registryService, authService)
